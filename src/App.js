@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 
 const data = [
@@ -23,6 +23,7 @@ const data = [
 function App() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchData, setSearchData] = useState(data);
+  const [timer, setTimer] = useState(null);
 
   const fetchData = (query) => {
     const result = data.filter((item) => {
@@ -31,9 +32,17 @@ function App() {
     console.log(result);
     setSearchData(result);
   };
+  useEffect(() => {
+    return () => {
+      clearTimeout(timer);
+    }
+  },[timer])
   const handleChange = (e) => {
     setSearchQuery(e.target.value);
-    fetchData(e.target.value);
+    const timerId = setTimeout(() => {
+      fetchData(e.target.value);
+    },1000)
+    setTimer(timerId);
   };
   return (
     <div className="App">
